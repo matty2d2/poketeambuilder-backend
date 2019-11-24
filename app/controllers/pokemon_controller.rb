@@ -2,24 +2,44 @@ class PokemonController < ApplicationController
 
     def index
         pokemons = Pokemon.all
-        render json: {pokemon: pokemons}
+        render json: pokemons.to_json(:include => {:types => {:only => [:id, :name]}}, :except => [:created_at, :updated_at])
     end
 
     def stealdata
-        #for val in 1..7 do #293 abilities, 18 types
-            poke = PokeApi.get(generation: 7)
-            # byebug
-            poke.pokemon_species.each do |po|
-                pokemon = Pokemon.all.find_by(name: po.name)
+        #for val in 1..7 do #293 abilities, 18 types, 721 pokemon
+            for val in 657..757 do
+                poke = PokeApi.get(pokemon: val)
+                pokemon = Pokemon.find(val)
+
                 if (pokemon)
-                    pokemon.generation = 7
-                    pokemon.save
+                    poke.types.each do |t|
+                        type = Type.all.find_by(name: t.type.name)
+
+                        if (type)
+                            a = PokemonType.new(pokemon: pokemon, type: type)
+
+                        else
+                            byebug
+                        end
+                    end
+                    
                 else
                     byebug
                 end
-                
-                
             end
+            
+
+            # poke.pokemon_species.each do |po|
+            #     pokemon = Pokemon.all.find_by(name: po.name)
+            #     if (pokemon)
+            #         pokemon.generation = 7
+            #         pokemon.save
+            #     else
+            #         byebug
+            #     end
+                
+                
+            # end
             # Ability.create(name: poke.name, effect: poke.effect_entries[0].short_effect)
 
             # Pokemon.create(
