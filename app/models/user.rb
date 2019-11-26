@@ -1,4 +1,5 @@
 class User < ApplicationRecord
     has_secure_password
-    has_many :teams
+    validates :username, uniqueness: true
+    has_many :teams, dependent: :destroy
 end
