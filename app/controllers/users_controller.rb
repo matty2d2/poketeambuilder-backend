@@ -37,11 +37,10 @@ class UsersController < ApplicationController
     def userteams
         user = get_current_user
         if user
-            # byebug
             render json: user.teams.to_json(:include => {
-                :pokemons => {:include => [:types], :except => [:created_at, :updated_at]}
-              })
-          else
+                :team_pokemons => {:include => {:pokemon => {:include => [:types], :only => [:generation, :front_sprite, :back_sprite]}}, :except => [:created_at, :updated_at]}
+            })
+        else
             render json: {error: 'Unable to validate user.'}, status: 401
         end
     end
