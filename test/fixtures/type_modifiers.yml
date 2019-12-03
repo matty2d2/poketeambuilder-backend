@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: one
+  target: one
+  damage_relation: one
+
+two:
+  type: two
+  target: two
+  damage_relation: two
