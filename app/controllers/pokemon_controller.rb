@@ -7,52 +7,48 @@ class PokemonController < ApplicationController
 
     def stealdata
         #for val in 1..7 do #293 abilities, 18 types, 721 pokemon
-            for val in 657..757 do
-                poke = PokeApi.get(pokemon: val)
-                pokemon = Pokemon.find(val)
+        byebug
+            for val in 1..18 do #up to 200 moves
+                poke = PokeApi.get(type: val)
 
-                if (pokemon)
-                    poke.types.each do |t|
-                        type = Type.all.find_by(name: t.type.name)
+                type = Type.all.find_by(name: poke.name)
+                byebug
 
-                        if (type)
-                            a = PokemonType.new(pokemon: pokemon, type: type)
+                
+                # move = Move.create(
+                #         name: poke.name, 
+                #         accuracy: poke.accuracy, 
+                #         effect_chance: poke.effect_chance, 
+                #         pp: poke.pp, 
+                #         priority: poke.priority, 
+                #         power: poke.power, 
+                #         damage_class: poke.damage_class.name,
+                #         ailment: poke.meta.ailment.name,
+                #         crit_rate: poke.meta.crit_rate,
+                #         drain: poke.meta.drain,
+                #         flinch_chance: poke.meta.flinch_chance,
+                #         healing: poke.meta.healing,
+                #         min_hits: poke.meta.min_hits,
+                #         max_hits: poke.meta.max_hits,
+                #         min_turns: poke.meta.min_turns,
+                #         max_turns: poke.meta.max_turns,
+                #         stat_chance: poke.meta.stat_chance,
+                #         target: poke.target.name,
+                #         type: type
+                #)
 
-                        else
-                            byebug
-                        end
+                for c in poke.stat_changes do
+                    sc = StatusChange.create(change: c.change, stat_name: c.stat.name, move: move)
+
+                    if (!sc)
+                        byebug
                     end
-                    
-                else
-                    byebug
                 end
+
             end
-            
 
-            # poke.pokemon_species.each do |po|
-            #     pokemon = Pokemon.all.find_by(name: po.name)
-            #     if (pokemon)
-            #         pokemon.generation = 7
-            #         pokemon.save
-            #     else
-            #         byebug
-            #     end
-                
-                
-            # end
-            # Ability.create(name: poke.name, effect: poke.effect_entries[0].short_effect)
+            done = 'done'
+            byebug
 
-            # Pokemon.create(
-            #     name: poke.name, 
-            #     base_speed: poke.stats[0].base_stat, 
-            #     base_special_defence: poke.stats[1].base_stat, 
-            #     base_special_attack: poke.stats[2].base_stat, 
-            #     base_defence: poke.stats[3].base_stat, 
-            #     base_attack: poke.stats[4].base_stat, 
-            #     base_hp: poke.stats[5].base_stat,
-            #     back_sprite: poke.sprites.back_default,
-            #     front_sprite: poke.sprites.front_default
-            # )
-        #end
     end
 end

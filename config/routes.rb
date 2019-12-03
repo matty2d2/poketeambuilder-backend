@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   post '/make-team', to: 'teams#maketeam'
   delete '/delete-team', to: 'teams#deleteteam'
   patch '/update-team', to: 'teams#updateteam'
+
+  get '/types/:type', to: 'types#show'
 end
