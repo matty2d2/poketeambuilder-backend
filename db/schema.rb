@@ -117,14 +117,12 @@ ActiveRecord::Schema.define(version: 2019_12_03_122238) do
   end
 
   create_table "type_modifiers", force: :cascade do |t|
-    t.integer "type_id", null: false
-    t.integer "target_id", null: false
+    t.integer "attack_relation_id"
+    t.integer "defence_relation_id"
     t.integer "damage_relation_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["damage_relation_id"], name: "index_type_modifiers_on_damage_relation_id"
-    t.index ["target_id"], name: "index_type_modifiers_on_target_id"
-    t.index ["type_id"], name: "index_type_modifiers_on_type_id"
   end
 
   create_table "types", force: :cascade do |t|
@@ -150,6 +148,4 @@ ActiveRecord::Schema.define(version: 2019_12_03_122238) do
   add_foreign_key "team_pokemons", "teams"
   add_foreign_key "teams", "users"
   add_foreign_key "type_modifiers", "damage_relations"
-  add_foreign_key "type_modifiers", "targets"
-  add_foreign_key "type_modifiers", "types"
 end
