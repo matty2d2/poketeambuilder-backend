@@ -7,14 +7,50 @@ class PokemonController < ApplicationController
 
     def stealdata
         #for val in 1..7 do #293 abilities, 18 types, 721 pokemon
+        for val in 1..18 do #up to 200 moves
+            poke = PokeApi.get(type: val)
+
+            type = Type.all.find_by(name: poke.name)
+            byebug
+
+            poke.damage_relations.no_damage_to.each do |item|
+                dmg_rel = DamageRelation.all[3]
+                defence_type = Type.all.find_by(name: item.name)
+                TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
+            end
+
+            poke.damage_relations.double_damage_to.each do |item|
+                dmg_rel = DamageRelation.all[2]
+                defence_type = Type.all.find_by(name: item.name)
+                TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
+            end
+
+            poke.damage_relations.half_damage_to.each do |item|
+                dmg_rel = DamageRelation.all[1]
+                defence_type = Type.all.find_by(name: item.name)
+                TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
+            end
+
+            poke.damage_relations.no_damage_from.each do |item|
+                dmg_rel = DamageRelation.all[3]
+                attack_type = Type.all.find_by(name: item.name)
+                TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
+            end
+
+            poke.damage_relations.double_damage_from.each do |item|
+                dmg_rel = DamageRelation.all[2]
+                attack_type = Type.all.find_by(name: item.name)
+                TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
+            end
+
+            poke.damage_relations.half_damage_from.each do |item|
+                dmg_rel = DamageRelation.all[1]
+                attack_type = Type.all.find_by(name: item.name)
+                TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
+            end
+        end
         byebug
-            for val in 1..18 do #up to 200 moves
-                poke = PokeApi.get(type: val)
-
-                type = Type.all.find_by(name: poke.name)
-                byebug
-
-                
+    end
                 # move = Move.create(
                 #         name: poke.name, 
                 #         accuracy: poke.accuracy, 
@@ -37,18 +73,15 @@ class PokemonController < ApplicationController
                 #         type: type
                 #)
 
-                for c in poke.stat_changes do
-                    sc = StatusChange.create(change: c.change, stat_name: c.stat.name, move: move)
+                # for c in poke.stat_changes do
+                #     sc = StatusChange.create(change: c.change, stat_name: c.stat.name, move: move)
 
-                    if (!sc)
-                        byebug
-                    end
-                end
+                #     if (!sc)
+                #         byebug
+                #     end
+            #     end
 
-            end
 
-            done = 'done'
-            byebug
-
-    end
+            # done = 'done'
+            # byebug
 end
