@@ -1,5 +1,5 @@
 class TeamPokemonSerializer < ActiveModel::Serializer
-    attributes :id, :name, :speed, :special_def, :special_atk, :defence, :attack, :hp, :back_sprite, :front_sprite, :generation, :types
+    attributes :id, :level, :name, :speed, :special_def, :special_atk, :defence, :attack, :hp, :back_sprite, :front_sprite, :generation, :types
 
     def team_pokemons
         ActiveModel::SerializableResource.new(object.types, each_serializer: TypesSerializer)

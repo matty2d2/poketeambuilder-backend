@@ -13,6 +13,7 @@ class TeamsController < ApplicationController
                 new_special_attack = pokemon.base_special_attack + rand(40)
                 new_defence = pokemon.base_defence + rand(40)
                 new_attack = pokemon.base_attack + rand(40)
+                level = rand(100)
 
                 tp = TeamPokemon.new(
                     team_id: team.id, 
@@ -23,7 +24,8 @@ class TeamsController < ApplicationController
                     special_def: new_special_defence, 
                     special_atk: new_special_attack,
                     defence: new_defence,
-                    attack: new_attack
+                    attack: new_attack,
+                    level: level
                 )
                 tp.save
             end
