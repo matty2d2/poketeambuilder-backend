@@ -1,5 +1,5 @@
 class TypeModifierSerializer < ActiveModel::Serializer
-    attributes :attack_type, :damage_relation, :defence_type
+    attributes :attack_type, :defence_type, :damage_relation 
 
     # def attack_relation
     #     ar = Type.find(object.attack_relation_id)
