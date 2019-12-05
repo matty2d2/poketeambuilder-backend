@@ -10,7 +10,7 @@ TeamPokemon.destroy_all
 User.destroy_all
 Team.destroy_all
 
-DamageRelation.destroy_all
+# DamageRelation.destroy_all
 
 user1 = User.create(username: 'Mike', password: 'Mike')
 user2 = User.create(username: 'Matt', password: 'Matt')

@@ -37,9 +37,10 @@ class UsersController < ApplicationController
     def userteams
         user = get_current_user
         if user
-            render json: user.teams.to_json(:include => {
-                :team_pokemons => {:include => {:pokemon => {:include => [:types], :only => [:generation, :front_sprite, :back_sprite]}}, :except => [:created_at, :updated_at]}
-            })
+            render json: {teams: ActiveModel::SerializableResource.new(user.teams, each_serializer: TeamSerializer)}
+            # user.teams.to_json(:include => {
+            #     :team_pokemons => {:include => {:pokemon => {:include => [:types], :only => [:generation, :front_sprite, :back_sprite]}}, :except => [:created_at, :updated_at]}
+            # })
         else
             render json: {error: 'Unable to validate user.'}, status: 401
         end
