@@ -5,26 +5,94 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+print "Seeding database:\n\n"
 
-
+DamageRelation.destroy_all
 Type.destroy_all
 Pokemon.destroy_all
 PokemonType.destroy_all
+TeamPokemon.destroy_all
+User.destroy_all
+Team.destroy_all
 
-####### Steal Pokemon from PokeApi ########
+
+print "Creating users...\n"
+user1 = User.create(username: 'Mike', password: 'Mike')
+user2 = User.create(username: 'Matt', password: 'Matt')
+print "Created users...\n\n"
+
+print "Creating damage relati
+on types...\n"
+##### Damage relation types ######
+DamageRelation.create(effectiveness: 1)
+DamageRelation.create(effectiveness: 0.5)
+DamageRelation.create(effectiveness: 2)
+DamageRelation.create(effectiveness: 0 )
+print "Created damage relation types.\n\n"
+
+####### Steal data from PokeApi ########
 #for val in 1..7 do #293 abilities, 18 types, 721 pokemon, #up to 200 moves
 
+print "Creating types...\n"
 # Types data
 for val in 1..18 do 
-    type = PokeApi.get(type: val)
-    Type.create(name: type.name)
+    get_type = PokeApi.get(type: val)
+    type = Type.create(name: get_type.name)
 end
+print "Created types.\n\n"
 
+
+print "Creating type modifiers...\n"
+for val in 1..18 do 
+    get_type = PokeApi.get(type: val)
+    type = Type.all.find_by(name: get_type.name)
+
+
+    get_type.damage_relations.no_damage_to.each do |item|
+        dmg_rel = DamageRelation.all[3]
+        defence_type = Type.all.find_by(name: item.name)
+        TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
+    end
+    
+    get_type.damage_relations.double_damage_to.each do |item|
+        dmg_rel = DamageRelation.all[2]
+        defence_type = Type.all.find_by(name: item.name)
+        TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
+    end
+    
+    get_type.damage_relations.half_damage_to.each do |item|
+        dmg_rel = DamageRelation.all[1]
+        defence_type = Type.all.find_by(name: item.name)
+        TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
+    end
+    
+    get_type.damage_relations.no_damage_from.each do |item|
+        dmg_rel = DamageRelation.all[3]
+        attack_type = Type.all.find_by(name: item.name)
+        TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
+    end
+    
+    get_type.damage_relations.double_damage_from.each do |item|
+        dmg_rel = DamageRelation.all[2]
+        attack_type = Type.all.find_by(name: item.name)
+        TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
+    end
+    
+    get_type.damage_relations.half_damage_from.each do |item|
+        dmg_rel = DamageRelation.all[1]
+        attack_type = Type.all.find_by(name: item.name)
+        TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
+    end
+end
+print "Created type modifiers.\n\n"
+
+
+print "Creating pokemon...\n"
 # # Pokemon and PokemonTypes data
 for val in 1..151 do #1st gen
     poke = PokeApi.get(pokemon: val)
 
-    Pokemon.create(
+    new_poke = Pokemon.create(
         name: poke.name, 
         base_speed: poke.stats[5].base_stat,
         base_special_defence: poke.stats[4].base_stat,
@@ -39,60 +107,17 @@ for val in 1..151 do #1st gen
 
     poke.types.each do |item|
         poke_type = Type.all.find_by(name: item.type.name)
-        PokemonType.create(pokemon_id: poke.id, type_id: poke_type.id)
+        PokemonType.create(pokemon: new_poke, type: poke_type)
     end 
 end
+print "Created pokemon...\n"
 
 
 ########################################
 
 
 
-TeamPokemon.destroy_all
-User.destroy_all
-Team.destroy_all
 
-# DamageRelation.destroy_all
-
-user1 = User.create(username: 'Mike', password: 'Mike')
-user2 = User.create(username: 'Matt', password: 'Matt')
-
-
-        # poke.damage_relations.no_damage_to.each do |item|
-    #     dmg_rel = DamageRelation.all[3]
-    #     defence_type = Type.all.find_by(name: item.name)
-    #     TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
-    # end
-
-    # poke.damage_relations.double_damage_to.each do |item|
-    #     dmg_rel = DamageRelation.all[2]
-    #     defence_type = Type.all.find_by(name: item.name)
-    #     TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
-    # end
-
-    # poke.damage_relations.half_damage_to.each do |item|
-    #     dmg_rel = DamageRelation.all[1]
-    #     defence_type = Type.all.find_by(name: item.name)
-    #     TypeModifier.create(attack_relation: defence_type, defence_relation: type, damage_relation: dmg_rel)
-    # end
-
-    # poke.damage_relations.no_damage_from.each do |item|
-    #     dmg_rel = DamageRelation.all[3]
-    #     attack_type = Type.all.find_by(name: item.name)
-    #     TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
-    # end
-
-    # poke.damage_relations.double_damage_from.each do |item|
-    #     dmg_rel = DamageRelation.all[2]
-    #     attack_type = Type.all.find_by(name: item.name)
-    #     TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
-    # end
-
-    # poke.damage_relations.half_damage_from.each do |item|
-    #     dmg_rel = DamageRelation.all[1]
-    #     attack_type = Type.all.find_by(name: item.name)
-    #     TypeModifier.create(attack_relation: type, defence_relation: attack_type, damage_relation: dmg_rel)
-    # end
 
         # move = Move.create(
         #         name: poke.name, 

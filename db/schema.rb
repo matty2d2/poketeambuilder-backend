@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2019_12_05_132643) do
   end
 
   create_table "damage_relations", force: :cascade do |t|
-    t.string "effectiveness"
+    t.float "effectiveness"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
