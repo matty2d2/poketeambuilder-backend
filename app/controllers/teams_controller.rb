@@ -20,6 +20,7 @@ class TeamsController < ApplicationController
                     pokemon_id: pokemon.id, 
                     name: pokemon.name,
                     hp: new_hp, 
+                    current_hp: new_hp, 
                     speed: new_speed, 
                     special_def: new_special_defence, 
                     special_atk: new_special_attack,
